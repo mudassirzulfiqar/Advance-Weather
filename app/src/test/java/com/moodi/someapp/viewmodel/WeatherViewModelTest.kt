@@ -1,6 +1,8 @@
 import com.moodi.someapp.repository.Resource
 import com.moodi.someapp.repository.WeatherAppData
+import com.moodi.someapp.repository.WeatherCondition
 import com.moodi.someapp.repository.WeatherRepository
+import com.moodi.someapp.repository.WeatherUnit
 import com.moodi.someapp.rule.TestDispatcherRule
 import com.moodi.someapp.viewmodel.UIEvent
 import com.moodi.someapp.viewmodel.WeatherViewModel
@@ -39,9 +41,9 @@ class WeatherViewModelTest {
     fun `initial state is correct`() {
         // Assert initial state values
         assertFalse(viewModel.state.loading)
-        assertEquals(0.0, viewModel.state.weatherData.temp)
-        assertEquals("", viewModel.state.weatherData.unit)
-        assertEquals("", viewModel.state.weatherData.message)
+        assertNull(viewModel.state.weatherData?.temperature)
+        assertNull(viewModel.state.weatherData?.unit)
+        assertNull(viewModel.state.weatherData?.condition)
         assertNull(viewModel.state.error)
     }
 
@@ -63,12 +65,12 @@ class WeatherViewModelTest {
     fun `fetching weather updates state with success`() = runTest {
         // Given
         val temperature = 25.5
-        val description = "Sunny"
+        val description = WeatherCondition.Cloudy
+        val unit = WeatherUnit.STANDARD
         val successFlow = flowOf(
             Resource.Success(
                 WeatherAppData(
-                    temperature = temperature,
-                    description = description
+                    temperature = temperature, unit = unit, condition = description
                 )
             )
         )
@@ -78,9 +80,9 @@ class WeatherViewModelTest {
         viewModel.sendEvent(UIEvent.FetchWeather(testLat, testLng))
 
         // Then
-        assertEquals(temperature, viewModel.state.weatherData.temp)
-        assertEquals(description, viewModel.state.weatherData.message)
-        assertEquals(description, viewModel.state.weatherData.unit)
+        assertEquals(temperature, viewModel.state.weatherData?.temperature)
+        assertEquals(description, viewModel.state.weatherData?.condition)
+        assertEquals(unit, viewModel.state.weatherData?.unit)
         assertFalse(viewModel.state.loading)
         assertNull(viewModel.state.error)
     }
@@ -104,13 +106,13 @@ class WeatherViewModelTest {
     fun `complete flow from loading to success`() = runTest {
         // Given
         val temperature = 25.5
-        val description = "Sunny"
+        val description = WeatherCondition.Cloudy
+        val unit = WeatherUnit.STANDARD
+
         val completeFlow = flowOf(
-            Resource.Loading<WeatherAppData>(),
-            Resource.Success(
+            Resource.Loading<WeatherAppData>(), Resource.Success(
                 WeatherAppData(
-                    temperature = temperature,
-                    description = description
+                    temperature = temperature, condition = description, unit = unit
                 )
             )
         )
@@ -120,8 +122,8 @@ class WeatherViewModelTest {
         viewModel.sendEvent(UIEvent.FetchWeather(testLat, testLng))
 
         // Then
-        assertEquals(temperature, viewModel.state.weatherData.temp)
-        assertEquals(description, viewModel.state.weatherData.message)
+        assertEquals(temperature, viewModel.state.weatherData?.temperature)
+        assertEquals(description, viewModel.state.weatherData?.condition)
         assertFalse(viewModel.state.loading)
         assertNull(viewModel.state.error)
     }
@@ -131,8 +133,7 @@ class WeatherViewModelTest {
         // Given
         val errorMessage = "Network error"
         val completeFlow = flowOf(
-            Resource.Loading<WeatherAppData>(),
-            Resource.Error<WeatherAppData>(errorMessage)
+            Resource.Loading<WeatherAppData>(), Resource.Error<WeatherAppData>(errorMessage)
         )
         every { weatherRepository.getWeather(any(), any()) } returns completeFlow
 

@@ -12,7 +12,7 @@ fun WeatherResponse.mapToApp(): WeatherAppData {
     return WeatherAppData(
         temperature = this.main.temp,
         condition = WeatherCondition.Cloudy,
-        unit = WeatherUnit.Celcius
+        unit = WeatherUnit.METRIC
     )
 }
 
@@ -24,8 +24,10 @@ sealed class Resource<T>(val data: T? = null, val message: String? = null) {
 }
 
 
-enum class WeatherUnit(val unit: String) {
-    Ferenhite("f"), Celcius("c")
+enum class WeatherUnit(val value: String, val symbol: String) {
+    METRIC("metric", "°C"),
+    IMPERIAL("imperial", "°F"),
+    STANDARD("standard", "K")
 }
 
 enum class WeatherCondition(val condition: String) {

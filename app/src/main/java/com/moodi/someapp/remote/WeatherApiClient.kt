@@ -4,11 +4,6 @@ import com.moodi.someapp.Result
 import com.moodi.someapp.location.AppLocation
 import kotlinx.serialization.Serializable
 
-enum class WeatherUnit(val value: String, val symbol: String) {
-    METRIC("metric", "°C"),
-    IMPERIAL("imperial", "°F"),
-    STANDARD("standard", "K")
-}
 
 @Serializable
 data class ErrorResponse(

@@ -1,11 +1,9 @@
 package com.moodi.someapp
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,8 +36,8 @@ import com.moodi.someapp.repository.WeatherCondition
 import com.moodi.someapp.repository.WeatherUnit
 import com.moodi.someapp.ui.theme.Purple80
 import com.moodi.someapp.ui.theme.SomeAppTheme
+import com.moodi.someapp.util.asTemperature
 import com.moodi.someapp.viewmodel.WeatherUIState
-import kotlin.math.roundToInt
 
 
 class MainActivity : ComponentActivity() {
@@ -74,7 +72,15 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-//                    MainScreen(modifier = Modifier.padding(innerPadding), )
+                    MainScreen(
+                        modifier = Modifier.padding(innerPadding), state = WeatherUIState(
+                            loading = false,
+                            WeatherAppData(
+                                22.0, WeatherCondition.Snow, WeatherUnit.METRIC
+                            ),
+                            error = null,
+                        )
+                    )
                 }
             }
         }
@@ -84,45 +90,75 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen(
-    modifier: Modifier = Modifier,
-    state: WeatherUIState
+    modifier: Modifier = Modifier, state: WeatherUIState
 ) {
     if (state.error != null || state.weatherData == null) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Text(
-                modifier = Modifier.align(Alignment.Center),
-                text = "Error fetching weather data",
-                style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight(300))
-            )
-        }
+        ErrorSection("Something went wrong")
     } else if (state.loading) {
-        Box {
-            CircularProgressIndicator()
-        }
+        LoadingSection()
     } else Box(modifier = modifier.fillMaxSize()) {
-        Column {
-            Text(
-                text = "Hilversum", style = TextStyle(
-                    fontSize = 20.sp, fontWeight = FontWeight(300)
-                )
-            )
-            Text(
-                text = "Chance of rain : 0%"
-            )
-            Text(
-                text = state.weatherData.temperature.toString(), style = TextStyle(
-                    fontSize = 80.sp, fontWeight = FontWeight(800)
-                )
-            )
+        Column(modifier = Modifier.align(Alignment.TopCenter)) {
+            LocationSection("Hilversum")
             Spacer(modifier = Modifier.padding(top = 2.dp, bottom = 2.dp))
-            Text(
-                text = state.weatherData.condition.condition, style = TextStyle(
-                    fontSize = 18.sp, fontWeight = FontWeight(600), color = Purple80
-                )
-            )
+            ChanceOfRainSection(12)
+            Spacer(modifier = Modifier.padding(top = 2.dp, bottom = 2.dp))
+            TemperatureSection(state.weatherData.temperature, state.weatherData.unit)
+            Spacer(modifier = Modifier.padding(top = 2.dp, bottom = 2.dp))
+            ConditionSection(state.weatherData.condition)
         }
+
+    }
+}
+
+@Composable
+fun LoadingSection() {
+    Box {
+        CircularProgressIndicator()
+    }
+
+}
+
+@Composable
+fun ErrorSection(error: String) {
+    Box(modifier = Modifier.fillMaxSize()) {
         Text(
-            text = state.weatherData.unit.unit, style = TextStyle(
+            modifier = Modifier.align(Alignment.Center),
+            text = error,
+            style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight(300))
+        )
+    }
+
+}
+
+@Composable
+fun ChanceOfRainSection(value: Int) {
+    Text(
+        text = "Chance of rain : $value%"
+    )
+}
+
+@Composable
+fun LocationSection(value: String) {
+    Text(
+        text = value, style = TextStyle(
+            fontSize = 20.sp, fontWeight = FontWeight(300)
+        )
+    )
+
+}
+
+@Composable
+fun TemperatureSection(
+    value: Double, unit: WeatherUnit
+) {
+    Row {
+        Text(
+            text = value.asTemperature(), style = TextStyle(
+                fontSize = 80.sp, fontWeight = FontWeight(800)
+            )
+        )
+        Text(
+            text = unit.symbol, style = TextStyle(
                 fontSize = 14.sp, fontWeight = FontWeight(300)
             )
         )
@@ -130,19 +166,30 @@ fun MainScreen(
     }
 }
 
-@Preview
 @Composable
-fun PreviewMain() {
-    MainScreen(
-        state = WeatherUIState(
-            loading = false,
-            WeatherAppData(
-                22.0,
-                WeatherCondition.Snow,
-                WeatherUnit.Celcius
-            ),
-            error = null,
+fun ConditionSection(value: WeatherCondition) {
+    Text(
+        text = value.condition, style = TextStyle(
+            fontSize = 18.sp, fontWeight = FontWeight(600), color = Purple80
         )
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewMain() {
+    SomeAppTheme {
+        MainScreen(
+            state = WeatherUIState(
+                loading = false,
+                WeatherAppData(
+                    temperature = 22.0,
+                    condition = WeatherCondition.Cloudy,
+                    unit = WeatherUnit.METRIC
+                ),
+                error = null,
+            )
+        )
+    }
 }
 

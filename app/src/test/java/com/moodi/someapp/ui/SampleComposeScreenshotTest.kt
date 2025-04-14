@@ -2,8 +2,10 @@ package com.moodi.someapp.ui
 
 import app.cash.paparazzi.Paparazzi
 import com.moodi.someapp.MainScreen
-import com.moodi.someapp.remote.Main
-import com.moodi.someapp.remote.WeatherResponse
+import com.moodi.someapp.repository.WeatherAppData
+import com.moodi.someapp.repository.WeatherCondition
+import com.moodi.someapp.repository.WeatherUnit
+import com.moodi.someapp.viewmodel.WeatherUIState
 import org.junit.Rule
 import org.junit.Test
 
@@ -13,14 +15,15 @@ class SampleComposeScreenshotTest {
     val paparazzi = Paparazzi()
 
     @Test
-    fun `verify screen with detail matching temperature and description`() {
+    fun `verify screen with success view`() {
         paparazzi.snapshot {
             MainScreen(
-                showError = false,
-                result = WeatherResponse(
-                    main = Main(
-                        temp = 22.0,
-                    )
+                state = WeatherUIState(
+                    loading = false,
+                    WeatherAppData(
+                        22.0, WeatherCondition.Snow, WeatherUnit.METRIC
+                    ),
+                    error = null,
                 )
             )
         }
@@ -30,11 +33,12 @@ class SampleComposeScreenshotTest {
     fun `verify screen for network Error`() {
         paparazzi.snapshot {
             MainScreen(
-                showError = true,
-                result = WeatherResponse(
-                    main = Main(
-                        temp = 22.0,
-                    )
+                state = WeatherUIState(
+                    loading = false,
+                    WeatherAppData(
+                        22.0, WeatherCondition.Snow, WeatherUnit.METRIC
+                    ),
+                    error = "Network Error",
                 )
             )
         }
@@ -44,11 +48,12 @@ class SampleComposeScreenshotTest {
     fun `verify screen for empty data`() {
         paparazzi.snapshot {
             MainScreen(
-                showError = false,
-                result = WeatherResponse(
-                    main = Main(
-                        temp = 0.0,
-                    )
+                state = WeatherUIState(
+                    loading = false,
+                    WeatherAppData(
+                        0.0, WeatherCondition.Snow, WeatherUnit.METRIC
+                    ),
+                    error = "Network Error",
                 )
             )
         }
