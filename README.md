@@ -112,3 +112,25 @@ The project includes comprehensive tests:
 The project includes GitHub Actions workflows for:
 - Running unit tests
 - Generating code coverage reports
+
+## TODO Improvements
+
+The following improvements are planned for this project:
+
+### Clean Code
+- Implement consistent naming conventions across the codebase
+- Refactor large methods into smaller, more focused functions
+- Add comprehensive documentation including KDoc comments
+- Apply SOLID principles more thoroughly
+
+### Improve Test Coverage
+- Increase unit test coverage to at least 80%
+- Add more integration tests for critical user flows
+- Implement UI tests for all major screens
+- Set up snapshot testing for UI components
+
+### Restructure Project Files
+- Consider migrating to a feature-based architecture
+- Alternatively, implement a cleaner layer-based architecture
+- Improve module organization for better separation of concerns
+- Extract reusable components into separate modules
