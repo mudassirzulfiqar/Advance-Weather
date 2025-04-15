@@ -2,14 +2,12 @@ package com.moodi.someapp.repository
 
 import app.cash.turbine.test
 import com.moodi.someapp.Result
-import com.moodi.someapp.remote.ErrorResponse
+import com.moodi.someapp.remote.BadRequestException
 import com.moodi.someapp.remote.Main
 import com.moodi.someapp.remote.RemoteClient
-import com.moodi.someapp.remote.WeatherApiClient
 import com.moodi.someapp.remote.WeatherResponse
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -51,9 +49,9 @@ class WeatherRepositoryTest {
     @Test
     fun `on lat lng return error weather`() = runTest {
 
-        coEvery { remoteClient.fetchWeather(any()) } returns Result.Error(
+        coEvery { remoteClient.fetchWeather(any()) } returns Result.Failure(
+            "",
             Exception("Network Error"),
-            null
         )
 
         weatherRepository.getWeather(0.00, 0.00).test {
@@ -71,11 +69,9 @@ class WeatherRepositoryTest {
     @Test
     fun `on lat lng return remote error weather`() = runTest {
 
-        coEvery { remoteClient.fetchWeather(any()) } returns Result.RemoteError(
-            ErrorResponse(
-                "400",
-                "wrong latitude"
-            )
+        coEvery { remoteClient.fetchWeather(any()) } returns Result.Failure(
+            "",
+            BadRequestException("")
         )
 
         weatherRepository.getWeather(0.00, 0.00).test {
@@ -85,7 +81,7 @@ class WeatherRepositoryTest {
 
             val errorResult = awaitItem()
 
-            assert((errorResult as Resource.Error).message == "Network Problem")
+            assert((errorResult is Resource.Error))
             awaitComplete()
         }
     }

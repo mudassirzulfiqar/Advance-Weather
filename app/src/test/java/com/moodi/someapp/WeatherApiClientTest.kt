@@ -38,9 +38,8 @@ class WeatherApiClientTest {
             ),
         )
         val weatherResponse = apiClient.getWeather(weatherRequest)
-
         assertTrue(weatherResponse is Result.Success)
-        assertEquals(25.0, weatherResponse.result!!.main.temp, 0.1)
+        assertEquals(25.0, (weatherResponse as Result.Success).data.main.temp, 0.1)
     }
 
     @Test
@@ -63,7 +62,7 @@ class WeatherApiClientTest {
             ),
         )
         val weatherResponse = apiClient.getWeather(weatherRequest)
-
-        assert(weatherResponse.result!!.main.temp in 0.0..50.0)
+        assertTrue(weatherResponse is Result.Success)
+        assert((weatherResponse as Result.Success).data.main.temp in 0.0..50.0)
     }
 }

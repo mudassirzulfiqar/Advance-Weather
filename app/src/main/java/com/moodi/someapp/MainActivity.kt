@@ -65,10 +65,10 @@ class MainActivity : ComponentActivity() {
                                 location = locationManager.getCurrentLocation()
                             )
                         )
-                        if (weatherResult is Result.RemoteError || weatherResult is Result.Error) {
+                        if (weatherResult is Result.Failure) {
                             error.value = true
                         } else {
-                            result.value = weatherResult.result
+                            result.value = (weatherResult as Result.Success).data
                         }
                     }
 

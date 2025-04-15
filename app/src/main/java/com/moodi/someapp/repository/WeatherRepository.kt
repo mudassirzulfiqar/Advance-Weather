@@ -53,16 +53,12 @@ class WeatherRepositoryImpl(val remoteClient: RemoteClient) : WeatherRepository 
         )
         val result = remoteClient.fetchWeather(location)
         if (result is Result.Success) {
-            if (result.result != null) {
-                emit(
-                    Resource.Success(
-                        result.result.mapToApp()
-                    )
+            emit(
+                Resource.Success(
+                    result.data.mapToApp()
                 )
-            } else {
-                emit(Resource.Error("Something Went Wrong"))
-            }
-        } else if (result is Result.Error) {
+            )
+        } else if (result is Result.Failure) {
             emit(Resource.Error("Something Went Wrong"))
         } else {
             emit(Resource.Error("Network Problem"))

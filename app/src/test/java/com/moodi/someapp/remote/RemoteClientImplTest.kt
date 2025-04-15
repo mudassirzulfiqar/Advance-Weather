@@ -107,7 +107,8 @@ class RemoteClientImplTest {
             )
         )
         // Verify the result
-        assert(result.result!!.main.temp == 25.0)
+        assert(result is Result.Success)
+        assert((result as Result.Success).data.main.temp == 25.0)
     }
 
     /**
@@ -126,7 +127,7 @@ class RemoteClientImplTest {
             )
         )
         // Verify the exceptions
-        assert(result is Result.RemoteError)
+        assert(result is Result.Failure)
     }
 
 }
