@@ -1,8 +1,8 @@
-import com.moodi.someapp.repository.Resource
-import com.moodi.someapp.repository.WeatherAppData
-import com.moodi.someapp.repository.WeatherCondition
-import com.moodi.someapp.repository.WeatherRepository
-import com.moodi.someapp.repository.WeatherUnit
+import com.moodi.someapp.data.util.Resource
+import com.moodi.someapp.domain.model.WeatherAppData
+import com.moodi.someapp.domain.model.WeatherCondition
+import com.moodi.someapp.domain.model.WeatherUnit
+import com.moodi.someapp.domain.repository.WeatherRepository
 import com.moodi.someapp.rule.TestDispatcherRule
 import com.moodi.someapp.viewmodel.UIEvent
 import com.moodi.someapp.viewmodel.WeatherViewModel

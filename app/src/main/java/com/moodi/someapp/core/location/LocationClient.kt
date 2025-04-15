@@ -1,4 +1,4 @@
-package com.moodi.someapp.location
+package com.moodi.someapp.core.location
 
 import android.Manifest
 import androidx.annotation.RequiresPermission

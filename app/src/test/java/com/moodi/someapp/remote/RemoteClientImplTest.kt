@@ -1,7 +1,9 @@
 package com.moodi.someapp.remote
 
-import com.moodi.someapp.Result
-import com.moodi.someapp.location.AppLocation
+import com.moodi.someapp.util.Result
+import com.moodi.someapp.domain.remote.client.RemoteClient
+import com.moodi.someapp.domain.remote.client.RemoteClientImpl
+import com.moodi.someapp.core.location.AppLocation
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond

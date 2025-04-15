@@ -2,9 +2,9 @@ package com.moodi.someapp.ui
 
 import app.cash.paparazzi.Paparazzi
 import com.moodi.someapp.MainScreen
-import com.moodi.someapp.repository.WeatherAppData
-import com.moodi.someapp.repository.WeatherCondition
-import com.moodi.someapp.repository.WeatherUnit
+import com.moodi.someapp.domain.model.WeatherAppData
+import com.moodi.someapp.domain.model.WeatherCondition
+import com.moodi.someapp.domain.model.WeatherUnit
 import com.moodi.someapp.viewmodel.WeatherUIState
 import org.junit.Rule
 import org.junit.Test

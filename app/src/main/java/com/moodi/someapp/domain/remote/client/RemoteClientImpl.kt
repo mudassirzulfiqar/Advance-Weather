@@ -1,7 +1,9 @@
-package com.moodi.someapp.remote
+package com.moodi.someapp.domain.remote.client
 
-import com.moodi.someapp.Result
-import com.moodi.someapp.location.AppLocation
+import com.moodi.someapp.util.Result
+import com.moodi.someapp.domain.remote.dto.ErrorDto
+import com.moodi.someapp.domain.remote.dto.WeatherDto
+import com.moodi.someapp.core.location.AppLocation
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
@@ -32,8 +34,8 @@ class RemoteClientImpl(val client: HttpClient) : RemoteClient {
         }
     */
 
-    override suspend fun fetchWeather(location: AppLocation): Result<WeatherResponse> {
-        return executeApi<WeatherResponse>(
+    override suspend fun fetchWeather(location: AppLocation): Result<WeatherDto> {
+        return executeApi<WeatherDto>(
             apiEndpoint = ApiEndpoint.WEATHER,
             requestBuilder = {
                 parameter("lat", location.latitude)
@@ -54,10 +56,10 @@ class RemoteClientImpl(val client: HttpClient) : RemoteClient {
             if (result.status.isSuccess()) {
                 return Result.Success(result.body<T>())
             } else {
-                val errorResponse = result.body<ErrorResponse>()
+                val errorDto = result.body<ErrorDto>()
                 return Result.Failure(
-                    data = result.body<ErrorResponse>().message,
-                    error = BadRequestException(errorResponse.message)
+                    data = result.body<ErrorDto>().message,
+                    error = BadRequestException(errorDto.message)
                 )
             }
 

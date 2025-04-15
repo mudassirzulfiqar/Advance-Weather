@@ -25,17 +25,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.android.gms.location.LocationServices
-import com.moodi.someapp.location.FakeLocationClient
-import com.moodi.someapp.remote.RemoteClientImpl
-import com.moodi.someapp.remote.WeatherApiClient
-import com.moodi.someapp.remote.WeatherRequest
-import com.moodi.someapp.remote.WeatherResponse
-import com.moodi.someapp.remote.client
-import com.moodi.someapp.repository.WeatherAppData
-import com.moodi.someapp.repository.WeatherCondition
-import com.moodi.someapp.repository.WeatherUnit
+import com.moodi.someapp.core.location.FakeLocationClient
+import com.moodi.someapp.domain.model.WeatherAppData
+import com.moodi.someapp.domain.model.WeatherCondition
+import com.moodi.someapp.domain.model.WeatherUnit
+import com.moodi.someapp.domain.remote.client.RemoteClientImpl
+import com.moodi.someapp.domain.remote.api.WeatherApiClient
+import com.moodi.someapp.domain.remote.client.client
+import com.moodi.someapp.domain.remote.dto.WeatherDto
+import com.moodi.someapp.domain.remote.dto.WeatherRequest
 import com.moodi.someapp.ui.theme.Purple80
 import com.moodi.someapp.ui.theme.SomeAppTheme
+import com.moodi.someapp.util.Result
 import com.moodi.someapp.util.asTemperature
 import com.moodi.someapp.viewmodel.WeatherUIState
 
@@ -56,7 +57,7 @@ class MainActivity : ComponentActivity() {
             SomeAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
-                    val result = remember { mutableStateOf<WeatherResponse?>(null) }
+                    val result = remember { mutableStateOf<WeatherDto?>(null) }
                     val error = remember { mutableStateOf<Boolean>(false) }
 
                     LaunchedEffect(true) {

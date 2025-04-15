@@ -1,11 +1,14 @@
 package com.moodi.someapp.repository
 
 import app.cash.turbine.test
-import com.moodi.someapp.Result
-import com.moodi.someapp.remote.BadRequestException
-import com.moodi.someapp.remote.Main
-import com.moodi.someapp.remote.RemoteClient
-import com.moodi.someapp.remote.WeatherResponse
+import com.moodi.someapp.util.Result
+import com.moodi.someapp.data.repository.WeatherRepositoryImpl
+import com.moodi.someapp.data.util.Resource
+import com.moodi.someapp.domain.remote.client.BadRequestException
+import com.moodi.someapp.domain.remote.client.RemoteClient
+import com.moodi.someapp.domain.remote.dto.Main
+import com.moodi.someapp.domain.remote.dto.WeatherDto
+import com.moodi.someapp.domain.repository.WeatherRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -27,7 +30,7 @@ class WeatherRepositoryTest {
     fun `on lat lng return success weather`() = runTest {
 
         coEvery { remoteClient.fetchWeather(any()) } returns Result.Success(
-            WeatherResponse(
+            WeatherDto(
                 Main(
                     22.0
                 )

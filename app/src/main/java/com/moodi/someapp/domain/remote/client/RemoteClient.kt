@@ -1,13 +1,15 @@
-package com.moodi.someapp.remote
+package com.moodi.someapp.domain.remote.client
 
 import com.moodi.someapp.BuildConfig
-import com.moodi.someapp.Result
-import com.moodi.someapp.location.AppLocation
+import com.moodi.someapp.util.Result
+import com.moodi.someapp.domain.remote.dto.WeatherDto
+import com.moodi.someapp.core.location.AppLocation
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.http.URLProtocol
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
@@ -22,7 +24,7 @@ val client = HttpClient {
     }
     install(DefaultRequest) {
         url {
-            protocol = io.ktor.http.URLProtocol.HTTPS
+            protocol = URLProtocol.HTTPS
             host = "api.openweathermap.org"
             parameters.append(
                 "APPID", BuildConfig.OPEN_WEATHER_API_KEY
@@ -37,7 +39,7 @@ enum class ApiEndpoint(val path: String) {
 }
 
 interface RemoteClient {
-    suspend fun fetchWeather(location: AppLocation): Result<WeatherResponse>
+    suspend fun fetchWeather(location: AppLocation): Result<WeatherDto>
 }
 
 

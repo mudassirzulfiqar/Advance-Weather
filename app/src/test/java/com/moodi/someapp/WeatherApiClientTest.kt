@@ -1,11 +1,12 @@
 package com.moodi.someapp
 
-import com.moodi.someapp.location.AppLocation
-import com.moodi.someapp.remote.Main
-import com.moodi.someapp.remote.RemoteClient
-import com.moodi.someapp.remote.WeatherApiClient
-import com.moodi.someapp.remote.WeatherRequest
-import com.moodi.someapp.remote.WeatherResponse
+import com.moodi.someapp.core.location.AppLocation
+import com.moodi.someapp.domain.remote.client.RemoteClient
+import com.moodi.someapp.domain.remote.api.WeatherApiClient
+import com.moodi.someapp.domain.remote.dto.Main
+import com.moodi.someapp.domain.remote.dto.WeatherDto
+import com.moodi.someapp.domain.remote.dto.WeatherRequest
+import com.moodi.someapp.util.Result
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -21,8 +22,8 @@ class WeatherApiClientTest {
     @Test
     fun `return weather data`() = runTest {
 
-        val result = Result.Success<WeatherResponse>(
-            WeatherResponse(
+        val result = Result.Success<WeatherDto>(
+            WeatherDto(
                 main = Main(
                     temp = 25.0,
                 )
@@ -45,8 +46,8 @@ class WeatherApiClientTest {
     @Test
     fun `return weather data for different location`() = runTest {
 
-        val result = Result.Success<WeatherResponse>(
-            WeatherResponse(
+        val result = Result.Success<WeatherDto>(
+            WeatherDto(
                 main = Main(
                     temp = 15.0,
                 )
