@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.moodi.someapp.data.util.Resource
 import com.moodi.someapp.domain.model.WeatherAppData
 import com.moodi.someapp.domain.repository.WeatherRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 sealed class UIEvent {
@@ -19,7 +21,7 @@ data class WeatherUIState(
 
 class WeatherViewModel(val weatherRepository: WeatherRepository) : ViewModel() {
 
-    private val _state = mutableStateOf(WeatherUIState())
+    private val _state = MutableStateFlow(WeatherUIState())
     val state get() = _state.value
 
 
@@ -34,21 +36,31 @@ class WeatherViewModel(val weatherRepository: WeatherRepository) : ViewModel() {
             weatherRepository.getWeather(lat, lng).collect {
                 when (it) {
                     is Resource.Error -> {
-                        _state.value = _state.value.copy(
-                            loading = false, error = it.message
-                        )
+                        _state.update { state ->
+                            state.copy(
+                                loading = false,
+                                error = it.message
+                            )
+                        }
+
                     }
 
                     is Resource.Loading -> {
-                        _state.value = _state.value.copy(
-                            loading = true
-                        )
+                        _state.update { state ->
+                            state.copy(
+                                loading = true
+                            )
+                        }
                     }
 
                     is Resource.Success -> {
-                        _state.value = _state.value.copy(
-                            loading = false, weatherData = it.data
-                        )
+                        _state.update { state ->
+
+                            state.copy(
+                                loading = false,
+                                weatherData = it.data
+                            )
+                        }
                     }
                 }
             }
