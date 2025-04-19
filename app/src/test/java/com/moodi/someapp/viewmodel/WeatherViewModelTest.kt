@@ -19,6 +19,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.util.WeakHashMap
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class WeatherViewModelTest {
@@ -40,25 +41,29 @@ class WeatherViewModelTest {
     @Test
     fun `initial state is correct`() {
         // Assert initial state values
-        assertFalse(viewModel.state.loading)
-        assertNull(viewModel.state.weatherData?.temperature)
-        assertNull(viewModel.state.weatherData?.unit)
-        assertNull(viewModel.state.weatherData?.condition)
-        assertNull(viewModel.state.error)
+        assertFalse(viewModel.state.value.loading)
+        assertNull(viewModel.state.value.weatherData?.temperature)
+        assertEquals("Hilversum", viewModel.state.value.weatherData?.locationName)
+        assertNull(viewModel.state.value.weatherData?.condition)
+        assertNull(viewModel.state.value.error)
     }
 
     @Test
     fun `fetching weather updates state with loading`() = runTest {
         // Given
         val loadingFlow = flowOf(Resource.Loading<WeatherAppData>())
-        every { weatherRepository.getWeather(any(), any()) } returns loadingFlow
+        every {
+            weatherRepository.getWeather(
+                any(), any(), WeatherUnit.STANDARD
+            )
+        } returns loadingFlow
 
         // When
-        viewModel.sendEvent(UIEvent.FetchWeather(testLat, testLng))
+        viewModel.sendEvent(UIEvent.FetchWeather(testLat, testLng, WeatherUnit.STANDARD))
 
         // Then
-        assertTrue(viewModel.state.loading)
-        verify { weatherRepository.getWeather(testLat, testLng) }
+        assertTrue(viewModel.state.value.loading)
+        verify { weatherRepository.getWeather(testLat, testLng, WeatherUnit.STANDARD) }
     }
 
     @Test
@@ -70,21 +75,21 @@ class WeatherViewModelTest {
         val successFlow = flowOf(
             Resource.Success(
                 WeatherAppData(
-                    temperature = temperature, unit = unit, condition = description
+                    temperature = temperature, locationName = "Hilversum", condition = description
                 )
             )
         )
-        every { weatherRepository.getWeather(any(), any()) } returns successFlow
+        every { weatherRepository.getWeather(any(), any(), unit) } returns successFlow
 
         // When
-        viewModel.sendEvent(UIEvent.FetchWeather(testLat, testLng))
+        viewModel.sendEvent(UIEvent.FetchWeather(testLat, testLng, WeatherUnit.STANDARD))
 
         // Then
-        assertEquals(temperature, viewModel.state.weatherData?.temperature)
-        assertEquals(description, viewModel.state.weatherData?.condition)
-        assertEquals(unit, viewModel.state.weatherData?.unit)
-        assertFalse(viewModel.state.loading)
-        assertNull(viewModel.state.error)
+        assertEquals(temperature, viewModel.state.value.weatherData?.temperature)
+        assertEquals(description, viewModel.state.value.weatherData?.condition)
+        assertEquals("Hilversum", viewModel.state.value.weatherData?.locationName)
+        assertFalse(viewModel.state.value.loading)
+        assertNull(viewModel.state.value.error)
     }
 
     @Test
@@ -92,14 +97,14 @@ class WeatherViewModelTest {
         // Given
         val errorMessage = "Something went wrong"
         val errorFlow = flowOf(Resource.Error<WeatherAppData>(errorMessage))
-        every { weatherRepository.getWeather(any(), any()) } returns errorFlow
+        every { weatherRepository.getWeather(any(), any(), WeatherUnit.STANDARD) } returns errorFlow
 
         // When
-        viewModel.sendEvent(UIEvent.FetchWeather(testLat, testLng))
+        viewModel.sendEvent(UIEvent.FetchWeather(testLat, testLng, WeatherUnit.STANDARD))
 
         // Then
-        assertEquals(errorMessage, viewModel.state.error)
-        assertFalse(viewModel.state.loading)
+        assertEquals(errorMessage, viewModel.state.value.error)
+        assertFalse(viewModel.state.value.loading)
     }
 
     @Test
@@ -112,20 +117,22 @@ class WeatherViewModelTest {
         val completeFlow = flowOf(
             Resource.Loading<WeatherAppData>(), Resource.Success(
                 WeatherAppData(
-                    temperature = temperature, condition = description, unit = unit
+                    temperature = temperature,
+                    condition = description,
+                    locationName = "Hilversum"
                 )
             )
         )
-        every { weatherRepository.getWeather(any(), any()) } returns completeFlow
+        every { weatherRepository.getWeather(any(), any(), unit) } returns completeFlow
 
         // When
-        viewModel.sendEvent(UIEvent.FetchWeather(testLat, testLng))
+        viewModel.sendEvent(UIEvent.FetchWeather(testLat, testLng, WeatherUnit.STANDARD))
 
         // Then
-        assertEquals(temperature, viewModel.state.weatherData?.temperature)
-        assertEquals(description, viewModel.state.weatherData?.condition)
-        assertFalse(viewModel.state.loading)
-        assertNull(viewModel.state.error)
+        assertEquals(temperature, viewModel.state.value.weatherData?.temperature)
+        assertEquals(description, viewModel.state.value.weatherData?.condition)
+        assertFalse(viewModel.state.value.loading)
+        assertNull(viewModel.state.value.error)
     }
 
     @Test
@@ -135,13 +142,19 @@ class WeatherViewModelTest {
         val completeFlow = flowOf(
             Resource.Loading<WeatherAppData>(), Resource.Error<WeatherAppData>(errorMessage)
         )
-        every { weatherRepository.getWeather(any(), any()) } returns completeFlow
+        every {
+            weatherRepository.getWeather(
+                any(),
+                any(),
+                WeatherUnit.STANDARD
+            )
+        } returns completeFlow
 
         // When
-        viewModel.sendEvent(UIEvent.FetchWeather(testLat, testLng))
+        viewModel.sendEvent(UIEvent.FetchWeather(testLat, testLng, WeatherUnit.STANDARD))
 
         // Then
-        assertEquals(errorMessage, viewModel.state.error)
-        assertFalse(viewModel.state.loading)
+        assertEquals(errorMessage, viewModel.state.value.error)
+        assertFalse(viewModel.state.value.loading)
     }
 }

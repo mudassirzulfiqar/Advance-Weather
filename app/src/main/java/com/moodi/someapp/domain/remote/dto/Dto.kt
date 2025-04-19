@@ -1,6 +1,6 @@
 package com.moodi.someapp.domain.remote.dto
 
-import com.moodi.someapp.core.location.AppLocation
+import com.moodi.someapp.domain.model.WeatherUnit
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -9,13 +9,20 @@ data class ErrorDto(
 )
 
 data class WeatherRequest(
-    val location: AppLocation,
+    val lat: Double,
+    val lng: Double,
+    val unit: String = WeatherUnit.STANDARD.value,
 )
 
 @Serializable
 data class WeatherDto(
-    val main: Main
+    val main: Main,
+    val weather: List<WeatherList>,
+    val name: String,
 )
+
+@Serializable
+data class WeatherList(val main: String)
 
 @Serializable
 data class Main(

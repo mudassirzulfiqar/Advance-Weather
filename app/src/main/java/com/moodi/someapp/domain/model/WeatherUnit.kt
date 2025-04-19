@@ -7,11 +7,16 @@ enum class WeatherUnit(val value: String, val symbol: String) {
 }
 
 enum class WeatherCondition(val condition: String) {
-    Sunny("Sunny"), Snow("Snow"), Rain("Rainy"), Cloudy("Cloudy")
+    Sunny("Sunny"),
+    Snow("Snow"),
+    Rain("Rainy"),
+    Cloudy("Cloudy"),
+    NotAvailable("Not Available"),
+    Other("Not Supported")
 }
 
 class WeatherAppData(
     val temperature: Double,
     val condition: WeatherCondition,
-    val unit: WeatherUnit
+    val locationName: String
 )

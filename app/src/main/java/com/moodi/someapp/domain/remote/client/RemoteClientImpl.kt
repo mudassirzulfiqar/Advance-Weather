@@ -3,7 +3,6 @@ package com.moodi.someapp.domain.remote.client
 import com.moodi.someapp.util.Result
 import com.moodi.someapp.domain.remote.dto.ErrorDto
 import com.moodi.someapp.domain.remote.dto.WeatherDto
-import com.moodi.someapp.core.location.AppLocation
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
@@ -34,12 +33,17 @@ class RemoteClientImpl(val client: HttpClient) : RemoteClient {
         }
     */
 
-    override suspend fun fetchWeather(location: AppLocation): Result<WeatherDto> {
+    override suspend fun fetchWeather(
+        lat: Double,
+        lng: Double,
+        unit: String,
+    ): Result<WeatherDto> {
         return executeApi<WeatherDto>(
             apiEndpoint = ApiEndpoint.WEATHER,
             requestBuilder = {
-                parameter("lat", location.latitude)
-                parameter("lon", location.longitude)
+                parameter("lat", lat)
+                parameter("lon", lng)
+                parameter("units", unit)
             },
         )
     }

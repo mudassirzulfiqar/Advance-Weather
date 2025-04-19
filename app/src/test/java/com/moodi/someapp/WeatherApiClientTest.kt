@@ -1,9 +1,8 @@
 package com.moodi.someapp
 
-import com.moodi.someapp.core.location.AppLocation
+import com.moodi.someapp.domain.model.WeatherUnit
 import com.moodi.someapp.domain.remote.client.RemoteClient
 import com.moodi.someapp.domain.remote.api.WeatherApiClient
-import com.moodi.someapp.domain.remote.dto.Main
 import com.moodi.someapp.domain.remote.dto.WeatherDto
 import com.moodi.someapp.domain.remote.dto.WeatherRequest
 import com.moodi.someapp.util.Result
@@ -23,44 +22,35 @@ class WeatherApiClientTest {
     fun `return weather data`() = runTest {
 
         val result = Result.Success<WeatherDto>(
-            WeatherDto(
-                main = Main(
-                    temp = 25.0,
-                )
-            )
+            SampleWeatherDTO
         )
 
-        coEvery { remoteClient.fetchWeather(any()) } returns result
+        coEvery { remoteClient.fetchWeather(any(), any(), WeatherUnit.METRIC.value) } returns result
         val apiClient = WeatherApiClient(remoteClient)
         val weatherRequest = WeatherRequest(
-            AppLocation(
-                latitude = 37.7749,
-                longitude = -122.4194,
-            ),
+            lat = 37.7749,
+            lng = -122.4194,
+            unit = WeatherUnit.METRIC.value
         )
         val weatherResponse = apiClient.getWeather(weatherRequest)
         assertTrue(weatherResponse is Result.Success)
-        assertEquals(25.0, (weatherResponse as Result.Success).data.main.temp, 0.1)
+        assertEquals(0.0, (weatherResponse as Result.Success).data.main.temp, 0.1)
     }
 
     @Test
     fun `return weather data for different location`() = runTest {
 
         val result = Result.Success<WeatherDto>(
-            WeatherDto(
-                main = Main(
-                    temp = 15.0,
-                )
-            )
+            SampleWeatherDTO
         )
 
-        coEvery { remoteClient.fetchWeather(any()) } returns result
+        coEvery { remoteClient.fetchWeather(any(), any(), WeatherUnit.METRIC.value) } returns result
         val apiClient = WeatherApiClient(remoteClient)
         val weatherRequest = WeatherRequest(
-            AppLocation(
-                latitude = 40.7128,
-                longitude = -74.0060
-            ),
+            lat = 40.7128,
+            lng = -74.0060,
+            unit = WeatherUnit.METRIC.value
+
         )
         val weatherResponse = apiClient.getWeather(weatherRequest)
         assertTrue(weatherResponse is Result.Success)

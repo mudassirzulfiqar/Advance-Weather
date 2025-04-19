@@ -13,6 +13,10 @@ interface ApiClient {
 
 class WeatherApiClient(private val remoteClient: RemoteClient) : ApiClient {
     override suspend fun getWeather(weatherRequest: WeatherRequest): Result<WeatherDto> {
-        return remoteClient.fetchWeather(weatherRequest.location);
+        return remoteClient.fetchWeather(
+            weatherRequest.lng,
+            weatherRequest.lat,
+            weatherRequest.unit
+        );
     }
 }

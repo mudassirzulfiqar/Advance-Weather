@@ -21,7 +21,7 @@ class SampleComposeScreenshotTest {
                 state = WeatherUIState(
                     loading = false,
                     WeatherAppData(
-                        22.0, WeatherCondition.Snow, WeatherUnit.METRIC
+                        22.0, WeatherCondition.Snow, "Hilversum"
                     ),
                     error = null,
                 )
@@ -36,7 +36,7 @@ class SampleComposeScreenshotTest {
                 state = WeatherUIState(
                     loading = false,
                     WeatherAppData(
-                        22.0, WeatherCondition.Snow, WeatherUnit.METRIC
+                        22.0, WeatherCondition.Snow, "Hilversum"
                     ),
                     error = "Network Error",
                 )
@@ -51,7 +51,7 @@ class SampleComposeScreenshotTest {
                 state = WeatherUIState(
                     loading = false,
                     WeatherAppData(
-                        0.0, WeatherCondition.Snow, WeatherUnit.METRIC
+                        0.0, WeatherCondition.Snow, "Hilversum"
                     ),
                     error = "Network Error",
                 )

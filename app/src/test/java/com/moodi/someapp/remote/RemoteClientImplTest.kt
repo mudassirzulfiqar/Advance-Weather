@@ -3,7 +3,6 @@ package com.moodi.someapp.remote
 import com.moodi.someapp.util.Result
 import com.moodi.someapp.domain.remote.client.RemoteClient
 import com.moodi.someapp.domain.remote.client.RemoteClientImpl
-import com.moodi.someapp.core.location.AppLocation
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -29,7 +28,13 @@ class RemoteClientImplTest {
     val successResponseForValidLocation = """{
       "main": {
         "temp": 25.0
-      }
+      },
+      "weather": [
+        {
+          "main": "Clouds"
+        }
+      ],
+      "name": "San Francisco"
     }"""
 
     val mockEngine = MockEngine { request ->
@@ -104,13 +109,16 @@ class RemoteClientImplTest {
 
         // Call the fetchWeather method
         val result = remoteClient.fetchWeather(
-            AppLocation(
-                latitude = 37.7749, longitude = -122.4194
-            )
+            lat = 37.7749,
+            lng = -122.4194,
+            unit = "metric"
+
         )
         // Verify the result
         assert(result is Result.Success)
         assert((result as Result.Success).data.main.temp == 25.0)
+        assert(result.data.weather[0].main == "Clouds")
+        assert(result.data.name == "San Francisco")
     }
 
     /**
@@ -124,12 +132,11 @@ class RemoteClientImplTest {
 
         // Call the fetchWeather method
         val result = remoteClient.fetchWeather(
-            AppLocation(
-                latitude = 200.0, longitude = 200.0
-            )
+            lat = 200.0, lng = 200.0, unit = "metric"
         )
         // Verify the exceptions
         assert(result is Result.Failure)
+        assert((result as Result.Failure).error.message == "wrong longitude")
     }
 
 }

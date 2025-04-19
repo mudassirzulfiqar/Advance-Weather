@@ -3,7 +3,6 @@ package com.moodi.someapp.domain.remote.client
 import com.moodi.someapp.BuildConfig
 import com.moodi.someapp.util.Result
 import com.moodi.someapp.domain.remote.dto.WeatherDto
-import com.moodi.someapp.core.location.AppLocation
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -39,7 +38,7 @@ enum class ApiEndpoint(val path: String) {
 }
 
 interface RemoteClient {
-    suspend fun fetchWeather(location: AppLocation): Result<WeatherDto>
+    suspend fun fetchWeather(lat: Double, lng: Double, unit: String): Result<WeatherDto>
 }
 
 
