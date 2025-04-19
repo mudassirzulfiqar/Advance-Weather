@@ -7,10 +7,11 @@ import com.moodi.someapp.domain.remote.dto.WeatherDto
 import com.moodi.someapp.domain.remote.dto.WeatherList
 
 fun List<WeatherList>.mapToCondition() = if (this.isEmpty()) {
-    WeatherCondition.NotAvailable
+    WeatherCondition.Other
 } else {
     when (this[0].main) {
         "Rain" -> WeatherCondition.Rain
+        "Sunny" -> WeatherCondition.Sunny
         else -> {
             WeatherCondition.Other
         }

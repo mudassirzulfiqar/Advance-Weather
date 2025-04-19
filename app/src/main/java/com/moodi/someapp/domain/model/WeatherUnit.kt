@@ -11,7 +11,6 @@ enum class WeatherCondition(val condition: String) {
     Snow("Snow"),
     Rain("Rainy"),
     Cloudy("Cloudy"),
-    NotAvailable("Not Available"),
     Other("Not Supported")
 }
 
