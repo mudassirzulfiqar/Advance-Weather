@@ -1,14 +1,14 @@
 [versions]
-agp = "8.9.0"
-kotlin = "2.0.21"
-coreKtx = "1.15.0"
+agp = "8.9.1"
+kotlin = "2.1.20"
+coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 kotlinxCoroutinesTest = "1.10.1"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
-composeBom = "2024.09.00"
+composeBom = "2025.04.00"
 jacocoVersion = "0.8.10"
 ktor = "3.1.2"
 mockk = "1.13.17" # or the latest version
@@ -32,7 +32,7 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
-kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version = "1.7.3" }
+kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version = "1.10.1" }
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
@@ -46,6 +46,7 @@ play-services-location = { group = "com.google.android.gms", name = "play-servic
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 paparazzi-gradle-plugin = { module = "app.cash.paparazzi:paparazzi-gradle-plugin", version.ref = "paparazzi" }
 cash-turbine = { module = "app.cash.turbine:turbine", version = "1.2.0" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version = "4.0.4" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

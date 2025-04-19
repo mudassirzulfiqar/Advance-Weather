@@ -1,8 +1,6 @@
 package com.moodi.someapp
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -26,45 +24,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.ActivityCompat
-import com.google.android.gms.location.FusedLocationProviderApi
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.moodi.someapp.core.location.FakeLocationClient
 import com.moodi.someapp.core.location.LocationManager
 import com.moodi.someapp.core.location.LocationResult
-import com.moodi.someapp.data.repository.WeatherRepositoryImpl
 import com.moodi.someapp.domain.model.WeatherAppData
 import com.moodi.someapp.domain.model.WeatherCondition
 import com.moodi.someapp.domain.model.WeatherUnit
-import com.moodi.someapp.domain.remote.api.WeatherApiClient
-import com.moodi.someapp.domain.remote.client.RemoteClientImpl
-import com.moodi.someapp.domain.remote.client.client
 import com.moodi.someapp.ui.theme.Purple80
 import com.moodi.someapp.ui.theme.SomeAppTheme
 import com.moodi.someapp.util.asTemperature
 import com.moodi.someapp.viewmodel.UIEvent
 import com.moodi.someapp.viewmodel.WeatherUIState
 import com.moodi.someapp.viewmodel.WeatherViewModel
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : ComponentActivity() {
+
+    private val locationManager: LocationManager by inject()
+    private val viewModel: WeatherViewModel by viewModel()
+
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val locationManager = LocationManager(
-            LocationServices.getFusedLocationProviderClient(this)
-        )
-
-        val viewModel = WeatherViewModel(
-            WeatherRepositoryImpl(
-                WeatherApiClient(
-                    RemoteClientImpl(client = client)
-                )
-            )
-        )
-
 
         enableEdgeToEdge()
         setContent {
@@ -88,8 +70,7 @@ class MainActivity : ComponentActivity() {
                         } else {
                             viewModel.sendEvent(
                                 UIEvent.FetchWeather(
-                                    0.00, 0.00,
-                                    WeatherUnit.METRIC
+                                    0.00, 0.00, WeatherUnit.METRIC
                                 )
                             )
                         }

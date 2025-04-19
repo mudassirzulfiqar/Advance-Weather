@@ -129,6 +129,7 @@ dependencies {
     implementation(libs.ktor.client.logging)
     implementation(libs.ktor.slf4j)
     implementation(libs.ktor.client.mock)
+    implementation(libs.koin.android)
 
     implementation(libs.play.services.location)
 

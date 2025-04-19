@@ -4,16 +4,9 @@ import android.Manifest
 import androidx.annotation.RequiresPermission
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Priority.PRIORITY_BALANCED_POWER_ACCURACY
-import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.tasks.CancellationTokenSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.tasks.await
-
-sealed class LocationResult {
-    data class Success(val latitude: Double, val longitude: Double) : LocationResult()
-    data class Failure(val reason: String) : LocationResult()
-}
-
 
 class LocationManager(private val locationModule: FusedLocationProviderClient) : LocationClient {
 
@@ -28,8 +21,7 @@ class LocationManager(private val locationModule: FusedLocationProviderClient) :
             val currentLocation = currentLocationTask.await(cancellationTokenSource)
 
             return LocationResult.Success(
-                latitude = currentLocation.latitude,
-                longitude = currentLocation.longitude
+                latitude = currentLocation.latitude, longitude = currentLocation.longitude
             )
         } catch (e: Exception) {
             return LocationResult.Failure(e.message ?: "")

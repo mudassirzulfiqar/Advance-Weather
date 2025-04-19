@@ -1,6 +1,5 @@
 package com.moodi.someapp.location
 
-import com.moodi.someapp.core.location.AppLocation
 import com.moodi.someapp.core.location.LocationClient
 import com.moodi.someapp.core.location.LocationResult
 import kotlinx.coroutines.test.runTest
