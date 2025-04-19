@@ -42,23 +42,19 @@ fun MainScreen(
     modifier: Modifier = Modifier, viewModel: WeatherViewModel, locationManager: LocationManager
 ) {
     val state = viewModel.state.collectAsState()
-    val scope = rememberCoroutineScope()
-
 
     OnLifecycleResume {
-        scope.launch {
-            locationManager.getCurrentLocation().collect { result ->
-                if (result is LocationResult.Success) {
-                    viewModel.sendEvent(
-                        UIEvent.FetchWeather(
-                            result.latitude, result.longitude, WeatherUnit.METRIC
-                        )
+        locationManager.getCurrentLocation().collect { result ->
+            if (result is LocationResult.Success) {
+                viewModel.sendEvent(
+                    UIEvent.FetchWeather(
+                        result.latitude, result.longitude, WeatherUnit.METRIC
                     )
-                } else {
-                    viewModel.sendEvent(UIEvent.LocationResultFailure((result as LocationResult.Failure).reason))
-                }
-
+                )
+            } else {
+                viewModel.sendEvent(UIEvent.LocationResultFailure((result as LocationResult.Failure).reason))
             }
+
         }
 
     }
