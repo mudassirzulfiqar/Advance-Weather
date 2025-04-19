@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -26,13 +27,14 @@ import com.moodi.someapp.core.location.LocationResult
 import com.moodi.someapp.domain.model.WeatherAppData
 import com.moodi.someapp.domain.model.WeatherCondition
 import com.moodi.someapp.domain.model.WeatherUnit
-import com.moodi.someapp.showPermissionMessage
+import com.moodi.someapp.ui.OnLifecycleResume
 import com.moodi.someapp.ui.theme.Purple80
 import com.moodi.someapp.ui.theme.SomeAppTheme
 import com.moodi.someapp.util.asTemperature
 import com.moodi.someapp.viewmodel.UIEvent
 import com.moodi.someapp.viewmodel.WeatherUIState
 import com.moodi.someapp.viewmodel.WeatherViewModel
+import kotlinx.coroutines.launch
 
 @SuppressLint("MissingPermission")
 @Composable
@@ -40,21 +42,25 @@ fun MainScreen(
     modifier: Modifier = Modifier, viewModel: WeatherViewModel, locationManager: LocationManager
 ) {
     val state = viewModel.state.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
-    LaunchedEffect(true) {
-        locationManager.getCurrentLocation().collect { result ->
-            if (result is LocationResult.Success) {
-                viewModel.sendEvent(
-                    UIEvent.FetchWeather(
-                        result.latitude, result.longitude, WeatherUnit.METRIC
+
+    OnLifecycleResume {
+        scope.launch {
+            locationManager.getCurrentLocation().collect { result ->
+                if (result is LocationResult.Success) {
+                    viewModel.sendEvent(
+                        UIEvent.FetchWeather(
+                            result.latitude, result.longitude, WeatherUnit.METRIC
+                        )
                     )
-                )
-            } else {
-                viewModel.sendEvent(UIEvent.LocationResultFailure((result as LocationResult.Failure).reason))
-            }
+                } else {
+                    viewModel.sendEvent(UIEvent.LocationResultFailure((result as LocationResult.Failure).reason))
+                }
 
+            }
         }
+
     }
     MainContent(modifier, state.value)
 }
