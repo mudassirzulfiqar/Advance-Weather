@@ -17,6 +17,8 @@ sealed class UIEvent {
         val lng: Double,
         val unit: WeatherUnit,
     ) : UIEvent()
+
+    data class LocationResultFailure(val message: String) : UIEvent()
 }
 
 data class WeatherUIState(
@@ -35,6 +37,11 @@ class WeatherViewModel(val weatherRepository: WeatherRepository) : ViewModel() {
     fun sendEvent(event: UIEvent) {
         when (event) {
             is UIEvent.FetchWeather -> fetchWeather(event.lat, event.lng, event.unit)
+            is UIEvent.LocationResultFailure -> _state.update { state ->
+                state.copy(
+                    error = event.message
+                )
+            }
         }
     }
 
