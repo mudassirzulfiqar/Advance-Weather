@@ -8,20 +8,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.moodi.someapp.core.location.LocationManager
 import com.moodi.someapp.core.location.LocationResult
 import com.moodi.someapp.domain.model.WeatherAppData
@@ -34,7 +30,6 @@ import com.moodi.someapp.util.asTemperature
 import com.moodi.someapp.viewmodel.UIEvent
 import com.moodi.someapp.viewmodel.WeatherUIState
 import com.moodi.someapp.viewmodel.WeatherViewModel
-import kotlinx.coroutines.launch
 
 @SuppressLint("MissingPermission")
 @Composable
@@ -98,7 +93,7 @@ fun ErrorSection(error: String) {
         Text(
             modifier = Modifier.align(Alignment.Center),
             text = error,
-            style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight(300))
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 
@@ -114,9 +109,7 @@ fun ChanceOfRainSection(value: Int) {
 @Composable
 fun LocationSection(value: String) {
     Text(
-        text = value, style = TextStyle(
-            fontSize = 20.sp, fontWeight = FontWeight(300)
-        )
+        text = value, style = MaterialTheme.typography.titleMedium
     )
 
 }
@@ -127,14 +120,10 @@ fun TemperatureSection(
 ) {
     Row {
         Text(
-            text = value.asTemperature(), style = TextStyle(
-                fontSize = 80.sp, fontWeight = FontWeight(800)
-            )
+            text = value.asTemperature(), style = MaterialTheme.typography.headlineMedium
         )
         Text(
-            text = unit.symbol, style = TextStyle(
-                fontSize = 14.sp, fontWeight = FontWeight(300)
-            )
+            text = unit.symbol, style = MaterialTheme.typography.labelMedium
         )
 
     }
@@ -143,26 +132,32 @@ fun TemperatureSection(
 @Composable
 fun ConditionSection(value: WeatherCondition) {
     Text(
-        text = value.condition, style = TextStyle(
-            fontSize = 18.sp, fontWeight = FontWeight(600), color = Purple80
+        text = value.condition, style = MaterialTheme.typography.bodyMedium, color = Purple80
+    )
+}
+
+class WeatherStatePreviewProvider : PreviewParameterProvider<WeatherUIState> {
+    override val values = sequenceOf(
+        WeatherUIState(
+            loading = false, weatherData = WeatherAppData(
+                temperature = 22.0, condition = WeatherCondition.Cloudy, locationName = "Hilversum"
+            ), error = null
+        ), WeatherUIState(
+            loading = false, weatherData = WeatherAppData(
+                temperature = 28.5, condition = WeatherCondition.Sunny, locationName = "Amsterdam"
+            ), error = null
+        ), WeatherUIState(
+            loading = true, weatherData = null, error = null
+        ), WeatherUIState(
+            loading = false, weatherData = null, error = "Unable to fetch weather data"
         )
     )
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, name = "Weather States Preview")
 @Composable
-fun PreviewMain() {
+fun PreviewMain(@PreviewParameter(WeatherStatePreviewProvider::class) state: WeatherUIState) {
     SomeAppTheme {
-        MainContent(
-            state = WeatherUIState(
-                loading = false,
-                WeatherAppData(
-                    temperature = 22.0,
-                    condition = WeatherCondition.Cloudy,
-                    locationName = "Hilversum"
-                ),
-                error = null,
-            )
-        )
+        MainContent(state = state)
     }
 }
