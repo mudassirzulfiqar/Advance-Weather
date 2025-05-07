@@ -1,16 +1,16 @@
 package com.moodi.someapp.data.repository
 
-import com.moodi.someapp.util.Result
+import com.moodi.someapp.core.common.Resource
+import com.moodi.someapp.core.common.Result
 import com.moodi.someapp.data.mapper.mapToApp
-import com.moodi.someapp.data.util.Resource
-import com.moodi.someapp.domain.repository.WeatherRepository
+import com.moodi.someapp.data.remote.dto.WeatherRequest
 import com.moodi.someapp.domain.model.WeatherUnit
-import com.moodi.someapp.domain.remote.api.ApiClient
-import com.moodi.someapp.domain.remote.dto.WeatherRequest
+import com.moodi.someapp.domain.remote.service.WeatherService
+import com.moodi.someapp.domain.repository.WeatherRepository
 import kotlinx.coroutines.flow.flow
 
 
-class WeatherRepositoryImpl(val apiClient: ApiClient) : WeatherRepository {
+class WeatherRepositoryImpl(val weatherService: WeatherService) : WeatherRepository {
 
     override fun getWeather(lat: Double, lng: Double, unit: WeatherUnit) = flow {
         emit(Resource.Loading())
@@ -18,7 +18,7 @@ class WeatherRepositoryImpl(val apiClient: ApiClient) : WeatherRepository {
         val request = WeatherRequest(
             lat = lat, lng = lng, unit = unit.value
         )
-        val result = apiClient.getWeather(request)
+        val result = weatherService.getWeather(request)
         if (result is Result.Success) {
             emit(
                 Resource.Success(

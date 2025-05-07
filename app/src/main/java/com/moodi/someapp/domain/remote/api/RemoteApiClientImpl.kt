@@ -1,8 +1,8 @@
-package com.moodi.someapp.domain.remote.client
+package com.moodi.someapp.domain.remote.api
 
-import com.moodi.someapp.util.Result
-import com.moodi.someapp.domain.remote.dto.ErrorDto
-import com.moodi.someapp.domain.remote.dto.WeatherDto
+import com.moodi.someapp.core.common.Result
+import com.moodi.someapp.data.remote.dto.ErrorDto
+import com.moodi.someapp.data.remote.dto.WeatherDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
@@ -12,7 +12,7 @@ import io.ktor.http.isSuccess
 
 class BadRequestException(message: String) : Exception(message)
 
-class RemoteClientImpl(val client: HttpClient) : RemoteClient {
+class RemoteApiClientImpl(val client: HttpClient) : RemoteApiClient {
 
     /*
         override suspend fun fetchWeather(location: AppLocation): Result<WeatherResponse> {

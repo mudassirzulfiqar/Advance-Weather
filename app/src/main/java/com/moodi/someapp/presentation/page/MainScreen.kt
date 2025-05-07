@@ -1,4 +1,4 @@
-package com.moodi.someapp.ui.page
+package com.moodi.someapp.presentation.page
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
@@ -18,23 +18,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import com.moodi.someapp.core.common.asTemperature
 import com.moodi.someapp.core.location.LocationManager
 import com.moodi.someapp.core.location.LocationResult
 import com.moodi.someapp.domain.model.WeatherAppData
 import com.moodi.someapp.domain.model.WeatherCondition
 import com.moodi.someapp.domain.model.WeatherUnit
+import com.moodi.someapp.presentation.viewmodel.UIEvent
+import com.moodi.someapp.presentation.viewmodel.WeatherUIState
+import com.moodi.someapp.presentation.viewmodel.WeatherViewModel
 import com.moodi.someapp.ui.OnLifecycleResume
 import com.moodi.someapp.ui.theme.Purple80
 import com.moodi.someapp.ui.theme.SomeAppTheme
-import com.moodi.someapp.util.asTemperature
-import com.moodi.someapp.viewmodel.UIEvent
-import com.moodi.someapp.viewmodel.WeatherUIState
-import com.moodi.someapp.viewmodel.WeatherViewModel
 
 @SuppressLint("MissingPermission")
 @Composable
 fun MainScreen(
-    modifier: Modifier = Modifier, viewModel: WeatherViewModel, locationManager: LocationManager
+    modifier: Modifier = Modifier,
+    viewModel: WeatherViewModel,
+    locationManager: LocationManager
 ) {
     val state = viewModel.state.collectAsState()
 

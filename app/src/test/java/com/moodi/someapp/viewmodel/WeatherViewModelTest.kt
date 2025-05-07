@@ -1,11 +1,11 @@
-import com.moodi.someapp.data.util.Resource
+import com.moodi.someapp.core.common.Resource
 import com.moodi.someapp.domain.model.WeatherAppData
 import com.moodi.someapp.domain.model.WeatherCondition
 import com.moodi.someapp.domain.model.WeatherUnit
 import com.moodi.someapp.domain.repository.WeatherRepository
 import com.moodi.someapp.rule.TestDispatcherRule
-import com.moodi.someapp.viewmodel.UIEvent
-import com.moodi.someapp.viewmodel.WeatherViewModel
+import com.moodi.someapp.presentation.viewmodel.UIEvent
+import com.moodi.someapp.presentation.viewmodel.WeatherViewModel
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -19,7 +19,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.util.WeakHashMap
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class WeatherViewModelTest {

@@ -1,4 +1,4 @@
-package com.moodi.someapp.domain.remote.dto
+package com.moodi.someapp.data.remote.dto
 
 import com.moodi.someapp.domain.model.WeatherUnit
 import kotlinx.serialization.Serializable

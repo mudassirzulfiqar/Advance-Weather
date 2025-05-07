@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.moodi.someapp.core.location.LocationManager
-import com.moodi.someapp.ui.page.MainScreen
+import com.moodi.someapp.presentation.page.MainScreen
 import com.moodi.someapp.ui.theme.SomeAppTheme
-import com.moodi.someapp.viewmodel.WeatherViewModel
+import com.moodi.someapp.presentation.viewmodel.WeatherViewModel
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

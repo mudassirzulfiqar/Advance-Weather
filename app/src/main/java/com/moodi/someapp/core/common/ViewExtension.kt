@@ -1,4 +1,4 @@
-package com.moodi.someapp.util
+package com.moodi.someapp.core.common
 
 import kotlin.math.roundToInt
 

@@ -2,9 +2,7 @@ package com.moodi.someapp.data.mapper
 
 import com.moodi.someapp.domain.model.WeatherAppData
 import com.moodi.someapp.domain.model.WeatherCondition
-import com.moodi.someapp.domain.model.WeatherUnit
-import com.moodi.someapp.domain.remote.dto.WeatherDto
-import com.moodi.someapp.domain.remote.dto.WeatherList
+import com.moodi.someapp.data.remote.dto.*
 
 fun List<WeatherList>.mapToCondition() = if (this.isEmpty()) {
     WeatherCondition.Other

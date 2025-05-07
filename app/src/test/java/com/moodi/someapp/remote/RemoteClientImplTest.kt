@@ -1,8 +1,8 @@
 package com.moodi.someapp.remote
 
-import com.moodi.someapp.util.Result
-import com.moodi.someapp.domain.remote.client.RemoteClient
-import com.moodi.someapp.domain.remote.client.RemoteClientImpl
+import com.moodi.someapp.core.common.Result
+import com.moodi.someapp.domain.remote.api.RemoteApiClient
+import com.moodi.someapp.domain.remote.api.RemoteApiClientImpl
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -88,7 +88,7 @@ class RemoteClientImplTest {
             headers = headersOf(HttpHeaders.ContentType, "application/json")
         )
     }
-    lateinit var remoteClient: RemoteClient
+    lateinit var remoteApiClient: RemoteApiClient
 
     @Before
     fun setup() {
@@ -100,7 +100,7 @@ class RemoteClientImplTest {
                 })
             }
         }
-        remoteClient = RemoteClientImpl(client)
+        remoteApiClient = RemoteApiClientImpl(client)
     }
 
 
@@ -108,7 +108,7 @@ class RemoteClientImplTest {
     fun `given location return weather in remote api`() = runTest {
 
         // Call the fetchWeather method
-        val result = remoteClient.fetchWeather(
+        val result = remoteApiClient.fetchWeather(
             lat = 37.7749,
             lng = -122.4194,
             unit = "metric"
@@ -131,7 +131,7 @@ class RemoteClientImplTest {
     fun `given unsupported location return error code `() = runTest {
 
         // Call the fetchWeather method
-        val result = remoteClient.fetchWeather(
+        val result = remoteApiClient.fetchWeather(
             lat = 200.0, lng = 200.0, unit = "metric"
         )
         // Verify the exceptions

@@ -1,8 +1,8 @@
 package com.moodi.someapp
 
-import com.moodi.someapp.domain.remote.dto.Main
-import com.moodi.someapp.domain.remote.dto.WeatherDto
-import com.moodi.someapp.domain.remote.dto.WeatherList
+import com.moodi.someapp.data.remote.dto.Main
+import com.moodi.someapp.data.remote.dto.WeatherDto
+import com.moodi.someapp.data.remote.dto.WeatherList
 
 
 fun provideFakeWeatherDto(temperature: Double, condition: String, location: String): WeatherDto {

@@ -2,15 +2,15 @@ package com.moodi.someapp.repository
 
 import app.cash.turbine.test
 import com.moodi.someapp.SampleWeatherDTO
+import com.moodi.someapp.core.common.Resource
+import com.moodi.someapp.core.common.Result
 import com.moodi.someapp.data.repository.WeatherRepositoryImpl
-import com.moodi.someapp.data.util.Resource
 import com.moodi.someapp.domain.model.WeatherCondition
 import com.moodi.someapp.domain.model.WeatherUnit
-import com.moodi.someapp.domain.remote.api.WeatherApiClient
-import com.moodi.someapp.domain.remote.client.BadRequestException
+import com.moodi.someapp.domain.remote.api.BadRequestException
+import com.moodi.someapp.domain.remote.service.WeatherServiceImpl
 import com.moodi.someapp.domain.repository.WeatherRepository
 import com.moodi.someapp.provideFakeWeatherDto
-import com.moodi.someapp.util.Result
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -19,19 +19,19 @@ import org.junit.Test
 
 class WeatherRepositoryTest {
 
-    val weatherApiClient = mockk<WeatherApiClient>()
+    val weatherServiceImpl = mockk<WeatherServiceImpl>()
 
     lateinit var weatherRepository: WeatherRepository
 
     @Before
     fun setup() {
-        weatherRepository = WeatherRepositoryImpl(weatherApiClient)
+        weatherRepository = WeatherRepositoryImpl(weatherServiceImpl)
     }
 
     @Test
     fun `on lat lng return success weather`() = runTest {
 
-        coEvery { weatherApiClient.getWeather(any()) } returns Result.Success(
+        coEvery { weatherServiceImpl.getWeather(any()) } returns Result.Success(
             SampleWeatherDTO
         )
 
@@ -54,7 +54,7 @@ class WeatherRepositoryTest {
     @Test
     fun `on lat lng return success weather with unknown Condition`() = runTest {
 
-        coEvery { weatherApiClient.getWeather(any()) } returns Result.Success(
+        coEvery { weatherServiceImpl.getWeather(any()) } returns Result.Success(
             provideFakeWeatherDto(0.0, "Any", "Hilversum")
         )
 
@@ -77,7 +77,7 @@ class WeatherRepositoryTest {
     @Test
     fun `on lat lng return error weather`() = runTest {
 
-        coEvery { weatherApiClient.getWeather(any()) } returns Result.Failure(
+        coEvery { weatherServiceImpl.getWeather(any()) } returns Result.Failure(
             "",
             Exception("Network Error"),
         )
@@ -97,7 +97,7 @@ class WeatherRepositoryTest {
     @Test
     fun `on lat lng return remote error weather`() = runTest {
 
-        coEvery { weatherApiClient.getWeather(any()) } returns Result.Failure(
+        coEvery { weatherServiceImpl.getWeather(any()) } returns Result.Failure(
             "", BadRequestException("")
         )
 
