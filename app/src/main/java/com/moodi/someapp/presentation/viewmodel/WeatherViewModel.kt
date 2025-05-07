@@ -11,23 +11,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-sealed class UIEvent {
-    data class FetchWeather(
-        val lat: Double,
-        val lng: Double,
-        val unit: WeatherUnit,
-    ) : UIEvent()
-
-    data class LocationResultFailure(val message: String) : UIEvent()
-}
-
-data class WeatherUIState(
-    val loading: Boolean = false,
-    val weatherData: WeatherAppData? = null,
-    val unit: WeatherUnit = WeatherUnit.METRIC,
-    val error: String? = null
-)
-
 
 class WeatherViewModel(val weatherRepository: WeatherRepository) : ViewModel() {
 
