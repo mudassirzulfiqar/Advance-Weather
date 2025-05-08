@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.moodi.someapp.core.common.asTemperature
 import com.moodi.someapp.core.location.LocationManager
 import com.moodi.someapp.core.location.LocationResult
-import com.moodi.someapp.domain.model.WeatherAppData
+import com.moodi.someapp.domain.model.WeatherApp
 import com.moodi.someapp.domain.model.WeatherCondition
 import com.moodi.someapp.domain.model.WeatherUnit
 import com.moodi.someapp.presentation.viewmodel.UIEvent
@@ -34,9 +34,7 @@ import com.moodi.someapp.ui.theme.SomeAppTheme
 @SuppressLint("MissingPermission")
 @Composable
 fun MainScreen(
-    modifier: Modifier = Modifier,
-    viewModel: WeatherViewModel,
-    locationManager: LocationManager
+    modifier: Modifier = Modifier, viewModel: WeatherViewModel, locationManager: LocationManager
 ) {
     val state = viewModel.state.collectAsState()
 
@@ -132,21 +130,27 @@ fun TemperatureSection(
 }
 
 @Composable
-fun ConditionSection(value: WeatherCondition) {
+fun ConditionSection(value: List<WeatherCondition>) {
     Text(
-        text = value.condition, style = MaterialTheme.typography.bodyMedium, color = Purple80
+        text = value.joinToString(", ") { it.condition },
+        style = MaterialTheme.typography.bodyMedium,
+        color = Purple80
     )
 }
 
 class WeatherStatePreviewProvider : PreviewParameterProvider<WeatherUIState> {
     override val values = sequenceOf(
         WeatherUIState(
-            loading = false, weatherData = WeatherAppData(
-                temperature = 22.0, condition = WeatherCondition.Cloudy, locationName = "Hilversum"
+            loading = false, weatherData = WeatherApp(
+                temperature = 22.0,
+                condition = listOf(WeatherCondition.Cloudy),
+                locationName = "Hilversum"
             ), error = null
         ), WeatherUIState(
-            loading = false, weatherData = WeatherAppData(
-                temperature = 28.5, condition = WeatherCondition.Sunny, locationName = "Amsterdam"
+            loading = false, weatherData = WeatherApp(
+                temperature = 28.5,
+                condition = listOf(WeatherCondition.Sunny),
+                locationName = "Amsterdam"
             ), error = null
         ), WeatherUIState(
             loading = true, weatherData = null, error = null

@@ -47,6 +47,12 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 paparazzi-gradle-plugin = { module = "app.cash.paparazzi:paparazzi-gradle-plugin", version.ref = "paparazzi" }
 cash-turbine = { module = "app.cash.turbine:turbine", version = "1.2.0" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version = "4.0.4" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version = "2.7.1" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version = "2.7.1" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version = "2.7.1" }
+
+[bundles]
+room = ["room-ktx", "room-runtime"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

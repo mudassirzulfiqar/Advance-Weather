@@ -1,11 +1,11 @@
 package com.moodi.someapp
 
 import com.moodi.someapp.core.common.Result
+import com.moodi.someapp.data.remote.api.WeatherApiService
+import com.moodi.someapp.data.remote.client.RemoteClient
 import com.moodi.someapp.data.remote.dto.WeatherDto
 import com.moodi.someapp.data.remote.dto.WeatherRequest
 import com.moodi.someapp.domain.model.WeatherUnit
-import com.moodi.someapp.domain.remote.api.RemoteApiClient
-import com.moodi.someapp.domain.remote.service.WeatherServiceImpl
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -15,7 +15,7 @@ import org.junit.Test
 
 class WeatherApiClientTest {
 
-    private val remoteApiClient = mockk<RemoteApiClient>()
+    private val remoteApiClient = mockk<RemoteClient>()
 
 
     @Test
@@ -32,7 +32,7 @@ class WeatherApiClientTest {
                 WeatherUnit.METRIC.value
             )
         } returns result
-        val apiClient = WeatherServiceImpl(remoteApiClient)
+        val apiClient = WeatherApiService(remoteApiClient)
         val weatherRequest = WeatherRequest(
             lat = 37.7749,
             lng = -122.4194,
@@ -57,7 +57,7 @@ class WeatherApiClientTest {
                 WeatherUnit.METRIC.value
             )
         } returns result
-        val apiClient = WeatherServiceImpl(remoteApiClient)
+        val apiClient = WeatherApiService(remoteApiClient)
         val weatherRequest = WeatherRequest(
             lat = 40.7128,
             lng = -74.0060,

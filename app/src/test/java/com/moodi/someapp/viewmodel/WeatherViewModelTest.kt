@@ -1,11 +1,11 @@
 import com.moodi.someapp.core.common.Resource
-import com.moodi.someapp.domain.model.WeatherAppData
+import com.moodi.someapp.domain.model.WeatherApp
 import com.moodi.someapp.domain.model.WeatherCondition
 import com.moodi.someapp.domain.model.WeatherUnit
 import com.moodi.someapp.domain.repository.WeatherRepository
-import com.moodi.someapp.rule.TestDispatcherRule
 import com.moodi.someapp.presentation.viewmodel.UIEvent
 import com.moodi.someapp.presentation.viewmodel.WeatherViewModel
+import com.moodi.someapp.rule.TestDispatcherRule
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -50,7 +50,7 @@ class WeatherViewModelTest {
     @Test
     fun `fetching weather updates state with loading`() = runTest {
         // Given
-        val loadingFlow = flowOf(Resource.Loading<WeatherAppData>())
+        val loadingFlow = flowOf(Resource.Loading<WeatherApp>())
         every {
             weatherRepository.getWeather(
                 any(), any(), WeatherUnit.STANDARD
@@ -73,8 +73,10 @@ class WeatherViewModelTest {
         val unit = WeatherUnit.STANDARD
         val successFlow = flowOf(
             Resource.Success(
-                WeatherAppData(
-                    temperature = temperature, locationName = "Hilversum", condition = description
+                WeatherApp(
+                    temperature = temperature,
+                    locationName = "Hilversum",
+                    condition = listOf(description)
                 )
             )
         )
@@ -95,7 +97,7 @@ class WeatherViewModelTest {
     fun `fetching weather updates state with error`() = runTest {
         // Given
         val errorMessage = "Something went wrong"
-        val errorFlow = flowOf(Resource.Error<WeatherAppData>(errorMessage))
+        val errorFlow = flowOf(Resource.Error<WeatherApp>(errorMessage))
         every { weatherRepository.getWeather(any(), any(), WeatherUnit.STANDARD) } returns errorFlow
 
         // When
@@ -114,10 +116,10 @@ class WeatherViewModelTest {
         val unit = WeatherUnit.STANDARD
 
         val completeFlow = flowOf(
-            Resource.Loading<WeatherAppData>(), Resource.Success(
-                WeatherAppData(
+            Resource.Loading<WeatherApp>(), Resource.Success(
+                WeatherApp(
                     temperature = temperature,
-                    condition = description,
+                    condition = listOf(description),
                     locationName = "Hilversum"
                 )
             )
@@ -139,7 +141,7 @@ class WeatherViewModelTest {
         // Given
         val errorMessage = "Network error"
         val completeFlow = flowOf(
-            Resource.Loading<WeatherAppData>(), Resource.Error<WeatherAppData>(errorMessage)
+            Resource.Loading<WeatherApp>(), Resource.Error<WeatherApp>(errorMessage)
         )
         every {
             weatherRepository.getWeather(

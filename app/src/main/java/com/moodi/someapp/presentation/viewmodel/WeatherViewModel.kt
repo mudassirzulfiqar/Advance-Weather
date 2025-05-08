@@ -3,7 +3,6 @@ package com.moodi.someapp.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moodi.someapp.core.common.Resource
-import com.moodi.someapp.domain.model.WeatherAppData
 import com.moodi.someapp.domain.model.WeatherUnit
 import com.moodi.someapp.domain.repository.WeatherRepository
 import kotlinx.coroutines.flow.MutableStateFlow

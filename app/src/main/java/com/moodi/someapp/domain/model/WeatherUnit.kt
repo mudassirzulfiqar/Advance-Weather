@@ -14,8 +14,8 @@ enum class WeatherCondition(val condition: String) {
     Other("Not Supported")
 }
 
-class WeatherAppData(
+class WeatherApp(
     val temperature: Double,
-    val condition: WeatherCondition,
+    val condition: List<WeatherCondition>,
     val locationName: String
 )

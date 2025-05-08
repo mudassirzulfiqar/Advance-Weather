@@ -1,8 +1,7 @@
 package com.moodi.someapp.remote
 
 import com.moodi.someapp.core.common.Result
-import com.moodi.someapp.domain.remote.api.RemoteApiClient
-import com.moodi.someapp.domain.remote.api.RemoteApiClientImpl
+import com.moodi.someapp.data.remote.client.RemoteClientImpl
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -88,7 +87,7 @@ class RemoteClientImplTest {
             headers = headersOf(HttpHeaders.ContentType, "application/json")
         )
     }
-    lateinit var remoteApiClient: RemoteApiClient
+    lateinit var remoteApiClient: RemoteClientImpl
 
     @Before
     fun setup() {
@@ -100,7 +99,7 @@ class RemoteClientImplTest {
                 })
             }
         }
-        remoteApiClient = RemoteApiClientImpl(client)
+        remoteApiClient = RemoteClientImpl(client)
     }
 
 

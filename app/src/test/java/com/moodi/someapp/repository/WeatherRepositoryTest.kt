@@ -4,11 +4,11 @@ import app.cash.turbine.test
 import com.moodi.someapp.SampleWeatherDTO
 import com.moodi.someapp.core.common.Resource
 import com.moodi.someapp.core.common.Result
+import com.moodi.someapp.data.remote.api.WeatherApiService
+import com.moodi.someapp.data.remote.client.BadRequestException
 import com.moodi.someapp.data.repository.WeatherRepositoryImpl
 import com.moodi.someapp.domain.model.WeatherCondition
 import com.moodi.someapp.domain.model.WeatherUnit
-import com.moodi.someapp.domain.remote.api.BadRequestException
-import com.moodi.someapp.domain.remote.service.WeatherServiceImpl
 import com.moodi.someapp.domain.repository.WeatherRepository
 import com.moodi.someapp.provideFakeWeatherDto
 import io.mockk.coEvery
@@ -19,7 +19,7 @@ import org.junit.Test
 
 class WeatherRepositoryTest {
 
-    val weatherServiceImpl = mockk<WeatherServiceImpl>()
+    val weatherServiceImpl = mockk<WeatherApiService>()
 
     lateinit var weatherRepository: WeatherRepository
 
@@ -46,7 +46,7 @@ class WeatherRepositoryTest {
 
             assert((successResult as Resource.Success).data?.temperature == 0.0)
             assert(successResult.data?.locationName == "Hilversum")
-            assert(successResult.data?.condition == WeatherCondition.Sunny)
+            assert(successResult.data?.condition == listOf(WeatherCondition.Sunny))
             awaitComplete()
         }
     }
@@ -69,7 +69,7 @@ class WeatherRepositoryTest {
 
             assert((successResult as Resource.Success).data?.temperature == 0.0)
             assert(successResult.data?.locationName == "Hilversum")
-            assert(successResult.data?.condition == WeatherCondition.Other)
+            assert(successResult.data?.condition == listOf(WeatherCondition.Other))
             awaitComplete()
         }
     }

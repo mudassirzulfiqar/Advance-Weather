@@ -9,6 +9,8 @@ plugins {
     id("jacoco")
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.paparazzi)
+    id("kotlin-kapt")
+    id("androidx.room") version "2.7.1" apply false
 }
 jacoco {
     toolVersion = libs.versions.jacocoVersion.get()
@@ -94,11 +96,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -130,8 +132,9 @@ dependencies {
     implementation(libs.ktor.slf4j)
     implementation(libs.ktor.client.mock)
     implementation(libs.koin.android)
-
     implementation(libs.play.services.location)
+    kapt(libs.room.compiler)
+    implementation(libs.bundles.room)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
